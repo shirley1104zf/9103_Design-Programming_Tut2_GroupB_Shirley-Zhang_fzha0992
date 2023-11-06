@@ -51,42 +51,21 @@ function draw() {
       text('Tap here to start sound playback', 10, 20, width - 20);
       return;
     }
-
-    background(0);
+    artwork.display()
+    //background(0);
     fill(255, random(255), random(255));
   
     let spectrum = fft.analyze();
    
     for (let i = 0; i < spectrum.length; i++) {
-      let length = map(spectrum[i], 0, 255, 0, height / 2);
-  
-      let x1 = 225;
-      let y1 = 225;
-      let x2 = x1 + cos(TWO_PI / spectrum.length * i) * length;
-      let y2 = y1 + sin(TWO_PI / spectrum.length * i) * length;
-  
-  
-          // Random strokeWeight between 1 and 3
-      let randomWeight = random(1, 3);
-      strokeWeight(randomWeight);
-  
-      // Random HSB fill color
-      //let hue = random(0, 255);
-      //let brightness = 255;
-      fill(0);
-  
-      stroke(233, 52, 104);
-  
-  
-      line(x1, y1, x2, y2);
-  
-      fill(0);
-      ellipse(225, 225, 20, 20);
+      let r = map(spectrum[i], 0, 255, 0, height / 2);
+      ellipse(width / 2, height / 2, r/2, r/2);
     }
+    
 
   push();
   scale(rateX, rateY);
-  artwork.display()
+  //artwork.display()
   pop();
 }
 
