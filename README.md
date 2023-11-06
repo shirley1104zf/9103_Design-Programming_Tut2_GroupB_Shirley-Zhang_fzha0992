@@ -6,4 +6,4 @@
 
 #### Audio: Use the level or frequency content of an audio track to animate your work.
 
-- There is text in the canvas that prompts the user to tap the screen to play audio. Subsequently, while the audio is playing, the screen will display circles with different radius that change with the length of the sound spectrum.
+- The canvas features a text prompt instructing the user to tap the screen to initiate audio playback. As the audio plays, dynamic circles of varying radii appear on the screen, synchronizing with the sound spectrum's duration.
