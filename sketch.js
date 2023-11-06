@@ -18,7 +18,7 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowHeight, windowHeight);
   rateX = width / 550.0;
   rateY = height / 550.0;
   noCursor();
@@ -28,7 +28,7 @@ function setup() {
 
   // This part I learned from Week 10 tutorial-Fast Fourier Transform, FFT part
   // Create a new FFT analysis object
-  fft = new p5.FFT(0.9, 512);
+  fft = new p5.FFT(0.8, 128);
   // Add the song (sample) into the FFT's input
   song.connect(fft);
 }
@@ -36,7 +36,7 @@ function setup() {
 // Function to handle window resizing
 function windowResized() {
   // Resize the canvas to match the new window dimensions
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowHeight, windowHeight);
   // Update the canvas width and height variables
   rateX = width / 550.0;
   rateY = height / 550.0;
@@ -44,29 +44,38 @@ function windowResized() {
 }
 
 function draw() {
-    //we cannot start an audio context without a user interaction, so lets check if the user has interacted with the screen
-    if (getAudioContext().state !== 'running') {
-      background(220);
-      fill(255);
-      text('Tap here to start sound playback', 10, 20, width - 20);
-      return;
-    }
-    artwork.display()
-    //background(0);
-    fill(255, random(255), random(255));
-  
-    let spectrum = fft.analyze();
-   
-    for (let i = 0; i < spectrum.length; i++) {
-      let r = map(spectrum[i], 0, 255, 0, height / 2);
-      ellipse(width / 2, height / 2, r/2, r/2);
-    }
-    
+  background(60, 80, 110)
+  //we cannot start an audio context without a user interaction, so lets check if the user has interacted with the screen
+  //background(60, 80, 110)
 
+       
   push();
   scale(rateX, rateY);
-  //artwork.display()
+  artwork.display();
   pop();
+
+
+  if (!song.isPlaying()) {
+    background(220)
+    fill(0, 0, 0)
+    textSize(22)
+    text('tap here to play some sound!', 10, 20, width - 20)
+    //return
+  } 
+    artwork.display()
+    // background(0)
+     background(60, 80, 110)
+    // fill(255, random(255), random(255))
+    let spectrum = fft.analyze()
+    for (let i = 0; i < positions.length; i++) {
+      fill(255, random(255), random(255))
+      for (let j = 0; j < spectrum.length; j++) {
+        let r = map(spectrum[j], 0, 255, 0, height / 2)
+        ellipse(positions[i].xPos, positions[i].yPos, r / 2, r / 2)
+      }
+    }
+    artwork.display();
+
 }
 
 // defines an Artwork class. This class is responsible for generating 
