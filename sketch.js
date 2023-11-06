@@ -1,22 +1,42 @@
-let artwork;
-let positions = []
-let CirBgColor = []
-let ShapeColor = []
+let artwork // Variable to store the artwork
+let positions = [] // Array to store the positions of the big circles
+let CirBgColor = [] // Array to store the background colors of the big circles
+let ShapeColor = [] // Array to store the shape colors inside the big circles
+// Array to store points for ZipLines
 let curve_40 = []
 let curve_25 = []
+// Scaling factor for axis
+let rateX = 1;
+let rateY = 1;
 
 function setup() {
-  createCanvas(550, 550)
+  createCanvas(windowWidth, windowHeight)
+  rateX = width / 550.0;
+  rateY = height / 550.0;
   noCursor()
   background(60, 80, 110)
   initArtworkData()
   artwork = new Artwork(positions, CirBgColor, ShapeColor)
 }
 
-function draw() {
- artwork.display()
+// Function to handle window resizing
+function windowResized() {
+  // Resize the canvas to match the new window dimensions
+  resizeCanvas(windowWidth, windowHeight);
+  // Update the canvas width and height variables
+  rateX = width / 550.0;
+  rateY = height / 550.0;
+  background(60, 80, 110);
 }
 
+function draw() {
+  push();
+  scale(rateX, rateY);
+  artwork.display();
+  pop();
+}
+
+// defines an Artwork class. This class is responsible for generating the visual elements of the artwork.
 class Artwork {
   constructor(positions, CirBgColor, ShapeColor) {
    this.positions = positions
@@ -24,20 +44,23 @@ class Artwork {
     this.ShapeColor = ShapeColor
   }
 
-
+  //display these components of the artwork
   display() {
-    this.drawCircle()
-    this.drawDotsIn()
-    this.drawRings()
-    this.drawZipLine()
-    this.drawHexagons()
-    this.drawCurves()
-    this.drawStraightLine(188, 85, 285, 0)
+    this.drawCircle() //draw circles at the positions specified by the positions array
+    this.drawDotsIn() //draws dots inside the circles
+    this.drawRings()  //draws rings inside the circles
+    this.drawZipLine()  //draws lines connecting various points
+    this.drawHexagons()  //draws a chain of small circles in a hexagonal pattern
+    this.drawCurves()  //draws smooth curves based on predefined control points
+    this.drawStraightLine(188, 85, 285, 0) //draws straight lines between two specified points
     this.drawStraightLine(193, 488, 315, 405)
   }
 
   //draw big circles
   drawCircle() {
+    // Draw big circles and various smaller circles inside them with different colors
+    // and sizes based on their positions.
+    // The `i` variable represents the index of the current big circle.
     for (let i = 0; i < this.positions.length; i++) {
       fill(this.CirBgColor[i].Out)
       noStroke()
@@ -60,7 +83,7 @@ class Artwork {
     }
   }
 
-  //draw dots inside of the big circle
+  //draw dots inside of the big circle, with different patterns and colors.
   drawDotsIn() {
     for (let i = 0; i < this.positions.length; i++) {
       //outer circle
@@ -136,7 +159,7 @@ class Artwork {
     }
   }
 
-  //draw zip lines in the big circle
+  //draw zip lines in the big circle, connecting dots to form ZipLines.
   drawZipLine() {
     for (let i = 0; i < this.positions.length; i++) {
       //draw lines at outer circle of the big circle
@@ -215,7 +238,7 @@ class Artwork {
     }
   }
 
-  //draw chain of small circles
+  //draw chain of small circles arranged in a hexagonal pattern.
   drawHexagons() {
     for (let i = 0; i < this.positions.length; i++) {
       let hexagonRadius = 90
@@ -269,6 +292,7 @@ class Artwork {
     }
   }
 
+  // Draw smooth curves using given points for each curve. 
   drawCurves() {
     noFill();
     stroke('#E93468')
@@ -342,6 +366,7 @@ class Artwork {
     })
   }
 
+  // Draw a smooth curve connecting a series of points using bezierVertex.
   drawSmoothCurve(points) {
     beginShape()
     // First point
@@ -360,7 +385,7 @@ class Artwork {
     endShape()
   }
 
-  //draw straight line
+  //Draw a straight line between two points.
   drawStraightLine(x1, y1, x2, y2) {
     stroke(255, 28, 0)
     strokeWeight(2)
@@ -368,8 +393,8 @@ class Artwork {
   }
 }
 
+// Initialize positions, background colors, and shape colors for the big circles.
 function initArtworkData() {
-
   //position of each big circle
   positions = [
     //redius: 75, space-between_horizontal: 20, space-between_vertical: 0
