@@ -6,19 +6,4 @@
 
 #### Audio: Use the level or frequency content of an audio track to animate your work.
 
-- According to the graphics completed by our group, the graphics are composed of many circles of different sizes, so my initial idea was to add lines animation effect to the center of the circles or dots. The length of the lines are determined by the length of the preloaded mp3 file's spectrum. But the effect is not very ideal, the picture looks messy.
-
-
-<p align="center"><img src="readmeImages/lines.png" width="480"\>
-</p>
-
-
-- 
-
-
-<p align="center"><img src="readmeImages/coding%20image.png" width="480"\>
-</p>
-
-
-[A link to an example code]()
-
+- There is text in the canvas that prompts the user to tap the screen to play audio. Subsequently, while the audio is playing, the screen will display circles with different radius that change with the length of the sound spectrum.
