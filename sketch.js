@@ -46,22 +46,26 @@ function windowResized() {
 function draw() {
   background(60, 80, 110);
   scale(rateX, rateY);
-  //we cannot start an audio context without a user interaction
-  //so lets check if the user has interacted with the screen
+  //display a message encouraging the user to tap the screen to start playing sound. 
+  //This part I learned from Week 10 tutorial-Fast Fourier Transform, FFT part
   if (getAudioContext().state !== 'running') {
-    background(60, 80, 110)
-    fill(255, 255, 255)
-    textSize(22)
-    text('tap here to play some sound!', 10, 20, width - 100)
-    return
+    background(60, 80, 110);
+    fill(255, 255, 255);
+    textSize(22);
+    text('tap here to play some sound!', 100, 20, width - 100);
+    return;
   } 
-    artwork.display()
-    let spectrum = fft.analyze()
+    artwork.display(); //display the artwork on the canvas
+    let spectrum = fft.analyze();
+    //enters a loop that goes through each position specified in the positions array.
     for (let i = 0; i < positions.length; i++) {
-      fill(255, random(255), random(255))
+      fill(255, random(255), random(255));
+      //iterate over the spectrum
       for (let j = 0; j < spectrum.length; j++) {
-        let r = map(spectrum[j], 0, 255, 0, height / (2*rateY))
-        ellipse(positions[i].xPos, positions[i].yPos, r / 2, r / 2)
+        //using map to set the radius of the ellipse
+        let r = map(spectrum[j], 0, 255, 0, height / (2*rateY));
+        //draw these ellipses
+        ellipse(positions[i].xPos, positions[i].yPos, r / 2, r / 2);
       }
     }
 }
@@ -489,6 +493,7 @@ function initArtworkData() {
   ]
 }
 
+//This part I learned from Week 10 tutorial-Fast Fourier Transform, FFT part
 // Toggle playback on or off with a mouse click
 function mousePressed() {
   if (song.isPlaying()) {
