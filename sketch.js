@@ -1,22 +1,36 @@
-let artwork // Variable to store the artwork
-let positions = [] // Array to store the positions of the big circles
-let CirBgColor = [] // Array to store the background colors of the big circles
-let ShapeColor = [] // Array to store the shape colors inside the big circles
+let song;
+let fft;
+let artwork; // Variable to store the artwork
+let positions = []; // Array to store the positions of the big circles
+let CirBgColor = []; // Array to store the background colors of the big circles
+let ShapeColor = []; // Array to store the shape colors inside the big circles
 // Array to store points for ZipLines
-let curve_40 = []
-let curve_25 = []
+let curve_40 = [];
+let curve_25 = [];
 // Scaling factor for axis
 let rateX = 1;
 let rateY = 1;
 
+function preload(){
+  // Fill in the url for your audio asset
+  // This audio file is from Week 10 quiz: sample-visualisation.mp3
+  song = loadSound("audio/sample-visualisation.mp3");
+}
+
 function setup() {
-  createCanvas(windowWidth, windowHeight)
+  createCanvas(windowWidth, windowHeight);
   rateX = width / 550.0;
   rateY = height / 550.0;
-  noCursor()
-  background(60, 80, 110)
-  initArtworkData()
-  artwork = new Artwork(positions, CirBgColor, ShapeColor)
+  noCursor();
+  background(60, 80, 110);
+  initArtworkData();
+  artwork = new Artwork(positions, CirBgColor, ShapeColor);
+
+  // This part I learned from Week 10 tutorial-Fast Fourier Transform, FFT part
+  // Create a new FFT analysis object
+  fft = new p5.FFT(0.9, 512);
+  // Add the song (sample) into the FFT's input
+  song.connect(fft);
 }
 
 // Function to handle window resizing
@@ -28,7 +42,48 @@ function windowResized() {
   rateY = height / 550.0;
   background(60, 80, 110);
 }
+
 function draw() {
+    //we cannot start an audio context without a user interaction, so lets check if the user has interacted with the screen
+    if (getAudioContext().state !== 'running') {
+      background(220);
+      fill(255);
+      text('Tap here to start sound playback', 10, 20, width - 20);
+      return;
+    }
+
+    background(0);
+    fill(255, random(255), random(255));
+  
+    let spectrum = fft.analyze();
+   
+    for (let i = 0; i < spectrum.length; i++) {
+      let length = map(spectrum[i], 0, 255, 0, height / 2);
+  
+      let x1 = 225;
+      let y1 = 225;
+      let x2 = x1 + cos(TWO_PI / spectrum.length * i) * length;
+      let y2 = y1 + sin(TWO_PI / spectrum.length * i) * length;
+  
+  
+          // Random strokeWeight between 1 and 3
+      let randomWeight = random(1, 3);
+      strokeWeight(randomWeight);
+  
+      // Random HSB fill color
+      //let hue = random(0, 255);
+      //let brightness = 255;
+      fill(0);
+  
+      stroke(233, 52, 104);
+  
+  
+      line(x1, y1, x2, y2);
+  
+      fill(0);
+      ellipse(225, 225, 20, 20);
+    }
+
   push();
   scale(rateX, rateY);
   artwork.display()
@@ -457,3 +512,15 @@ function initArtworkData() {
     { Out: color(15, 133, 52) }
   ]
 }
+
+// Toggle playback on or off with a mouse click
+function mousePressed() {
+  if (song.isPlaying()) {
+  // .isPlaying() returns a boolean
+  song.stop();
+  background(255, 0, 0);
+  } else {
+  song.play();
+  background(0, 255, 0);
+  }
+  }
